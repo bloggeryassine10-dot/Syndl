@@ -1,0 +1,734 @@
+/* ============================================
+   MOVIE PAGE STYLES
+   Extends main.css for movie-specific elements
+============================================ */
+
+/* Background */
+.bg-gradient {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(ellipse at top left, rgba(229, 9, 20, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom right, rgba(245, 197, 24, 0.05) 0%, transparent 50%),
+        var(--bg-primary);
+    z-index: -1;
+}
+
+/* ============================================
+   PLAYER SECTION
+============================================ */
+.player-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 90px 20px 30px;
+}
+
+.title-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.movie-info-header h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+    font-weight: 700;
+    background: linear-gradient(135deg, #e50914, #ff6b6b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 6px;
+}
+
+.meta {
+    display: flex;
+    gap: 14px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.quality-badge {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    box-shadow: 0 0 20px rgba(229, 9, 20, 0.4);
+}
+
+/* ============================================
+   VIDEO PLAYER
+============================================ */
+.player-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #000;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Thumbnail Overlay */
+.thumbnail-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    cursor: pointer;
+}
+
+.thumbnail-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.play-button-big {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    z-index: 6;
+}
+
+.play-circle {
+    width: 90px;
+    height: 90px;
+    background: linear-gradient(135deg, #e50914, #b20710);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 40px rgba(229, 9, 20, 0.6);
+    transition: all 0.3s ease;
+}
+
+.play-circle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 60px rgba(229, 9, 20, 0.8);
+}
+
+.play-svg {
+    width: 35px;
+    height: 35px;
+    margin-left: 6px;
+}
+
+.play-text {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Video Element */
+#video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+}
+
+/* ============================================
+   PLAYER CONTROLS
+============================================ */
+.player-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.95));
+    padding: 40px 16px 16px;
+    z-index: 10;
+    transition: opacity 0.3s ease;
+}
+
+.player-container:not(:hover) .player-controls:not(.always-show) {
+    opacity: 0;
+}
+
+/* Progress Bar */
+.progress-container {
+    position: relative;
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.progress-bar {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    overflow: visible;
+    position: relative;
+}
+
+.progress-buffered {
+    position: absolute;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+}
+
+.progress-played {
+    position: absolute;
+    height: 100%;
+    background: var(--primary);
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
+}
+
+.progress-thumb {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.progress-container:hover .progress-thumb {
+    opacity: 1;
+}
+
+/* Controls Row */
+.controls-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.controls-left,
+.controls-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ctrl-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+.ctrl-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.ctrl-btn svg {
+    width: 22px;
+    height: 22px;
+}
+
+.time-display {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-left: 8px;
+}
+
+/* ============================================
+   LOADING SPINNER
+============================================ */
+.loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 8;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================
+   LOCK OVERLAY
+============================================ */
+.player-lock-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lock-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lock-blur {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+.lock-box {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 40px;
+    max-width: 400px;
+}
+
+.lock-icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    animation: pulse 2s infinite;
+}
+
+.lock-box h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.lock-box p {
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+.urgency-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--accent);
+    margin-bottom: 24px;
+}
+
+.urgency-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+}
+
+.unlock-btn {
+    width: 100%;
+    padding: 16px 32px;
+    background: var(--gradient-primary);
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 0 30px rgba(229, 9, 20, 0.5);
+    transition: all 0.3s ease;
+}
+
+.unlock-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 50px rgba(229, 9, 20, 0.7);
+}
+
+.lock-note {
+    display: block;
+    margin-top: 14px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* ============================================
+   FULL MOVIE CONTAINER
+============================================ */
+.full-movie-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 25;
+}
+
+.full-movie-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* ============================================
+   PLAYER INFO BAR
+============================================ */
+.player-info-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    margin-top: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    font-size: 0.9rem;
+}
+
+.now-playing {
+    color: var(--text-secondary);
+}
+
+.server-info {
+    color: #00d4aa;
+}
+
+/* ============================================
+   BOTTOM SECTION
+============================================ */
+.bottom-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 20px 50px;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 24px;
+}
+
+.info-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Info Cards */
+.info-card {
+    background: linear-gradient(145deg, rgba(229, 9, 20, 0.08), var(--bg-secondary));
+    border: 1px solid rgba(229, 9, 20, 0.15);
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.3s ease;
+}
+
+.info-card:hover {
+    border-color: rgba(229, 9, 20, 0.3);
+    box-shadow: 0 10px 40px rgba(229, 9, 20, 0.1);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.card-icon {
+    font-size: 1.3rem;
+}
+
+.card-icon.live {
+    animation: pulse 1.5s infinite;
+}
+
+.card-header h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.live-badge {
+    background: var(--primary);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+    animation: pulse 2s infinite;
+    margin-left: auto;
+}
+
+.synopsis-card p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+/* Cast Grid */
+.cast-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 10px;
+}
+
+.cast-chip {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    transition: all 0.3s ease;
+}
+
+.cast-chip:hover {
+    background: rgba(229, 9, 20, 0.1);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.actor-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.role {
+    font-size: 0.72rem;
+    color: var(--primary);
+    opacity: 0.8;
+}
+
+/* Activity Column */
+.activity-column {
+    display: flex;
+}
+
+.activity-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.activity-feed {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.activity-item.new {
+    border-left-color: var(--primary);
+    background: rgba(229, 9, 20, 0.08);
+}
+
+.activity-icon {
+    font-size: 0.9rem;
+}
+
+.activity-text {
+    flex: 1;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+}
+
+.activity-time {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+/* Activity Stats */
+.activity-stats {
+    display: flex;
+    gap: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.stat-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ============================================
+   RELATED SECTION
+============================================ */
+.related-section {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--glass-border);
+}
+
+/* ============================================
+   OGADS OVERLAYS
+============================================ */
+.ogads-waiting-overlay,
+.ogads-retry-prompt {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.ogads-waiting-content,
+.ogads-retry-content {
+    text-align: center;
+    padding: 40px;
+}
+
+.ogads-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+.ogads-waiting-content p {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.ogads-note {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.retry-icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+}
+
+.ogads-retry-content h3 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+}
+
+.ogads-retry-content p {
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+
+.ogads-retry-content .btn {
+    margin: 0 8px;
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+@media (max-width: 768px) {
+    .player-section {
+        padding: 80px 15px 20px;
+    }
+
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .player-info-bar {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+
+    .lock-box {
+        padding: 30px 20px;
+    }
+
+    .play-circle {
+        width: 70px;
+        height: 70px;
+    }
+
+    .play-svg {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .title-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .cast-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Hidden class */
+.hidden {
+    display: none !important;
+}

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Watch movie in HD quality on SYNDL">
+    <title>Watch Movie - SYNDL</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/movie.css">
+</head>
+
+<body>
+    <!-- Background Gradient -->
+    <div class="bg-gradient"></div>
+
+    <!-- ============================================
+         NAVBAR
+    ============================================ -->
+    <nav class="navbar scrolled">
+        <div class="container">
+            <div class="navbar-content">
+                <a href="index.html" class="logo">
+                    <span class="logo-icon">🎬</span>
+                    <span class="logo-text">SYNDL</span>
+                </a>
+
+                <div class="nav-right">
+                    <div class="live-viewers">
+                        <span class="live-dot"></span>
+                        <span id="liveCount">12,847</span> watching
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============================================
+         MAIN PLAYER SECTION
+    ============================================ -->
+    <main class="player-section">
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <div class="movie-info-header">
+                <h1 id="movieTitle">Loading...</h1>
+                <div class="meta" id="movieMeta">
+                    <span>⭐ --</span>
+                    <span>----</span>
+                    <span>--h --min</span>
+                </div>
+            </div>
+            <span class="quality-badge" id="qualityBadge">HD 1080p</span>
+        </div>
+
+        <!-- Video Player Container -->
+        <div class="player-container" id="playerContainer">
+            <!-- Thumbnail Overlay -->
+            <div class="thumbnail-overlay" id="thumbnailOverlay">
+                <img src="" alt="" class="thumbnail-img" id="thumbnailImg">
+                <div class="play-button-big" id="bigPlayBtn">
+                    <div class="play-circle">
+                        <svg viewBox="0 0 24 24" class="play-svg">
+                            <polygon points="5,3 19,12 5,21" fill="white" />
+                        </svg>
+                    </div>
+                    <span class="play-text">PLAY NOW</span>
+                </div>
+            </div>
+
+            <!-- Video Element -->
+            <video id="video" preload="metadata">
+                <source src="" type="video/mp4" id="videoSource">
+                Your browser does not support the video tag.
+            </video>
+
+            <!-- Custom Controls -->
+            <div class="player-controls hidden" id="playerControls">
+                <!-- Progress Bar -->
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar" id="progressBar">
+                        <div class="progress-buffered" id="progressBuffered"></div>
+                        <div class="progress-played" id="progressPlayed"></div>
+                        <div class="progress-thumb" id="progressThumb"></div>
+                    </div>
+                </div>
+
+                <!-- Controls Row -->
+                <div class="controls-row">
+                    <div class="controls-left">
+                        <!-- Play/Pause -->
+                        <button class="ctrl-btn" id="playPauseBtn" title="Play/Pause">
+                            <svg class="icon-play" viewBox="0 0 24 24">
+                                <polygon points="5,3 19,12 5,21" fill="white" />
+                            </svg>
+                            <svg class="icon-pause hidden" viewBox="0 0 24 24">
+                                <rect x="5" y="3" width="4" height="18" fill="white" />
+                                <rect x="15" y="3" width="4" height="18" fill="white" />
+                            </svg>
+                        </button>
+
+                        <!-- Skip Backward -->
+                        <button class="ctrl-btn" id="skipBackBtn" title="Rewind 10s">
+                            <svg viewBox="0 0 24 24">
+                                <path fill="white"
+                                    d="M12.5 3C17.15 3 21.08 6.03 22.47 10.22L20.1 11C19.05 7.81 16.04 5.5 12.5 5.5C10.54 5.5 8.77 6.22 7.38 7.38L10 10H3V3L5.6 5.6C7.45 4 9.85 3 12.5 3M10 12V22H8V14H6V12H10M18 14V20C18 21.11 17.11 22 16 22H14C12.9 22 12 21.1 12 20V14C12 12.9 12.9 12 14 12H16C17.11 12 18 12.9 18 14M14 14V20H16V14H14Z" />
+                            </svg>
+                        </button>
+
+                        <!-- Skip Forward -->
+                        <button class="ctrl-btn" id="skipForwardBtn" title="Forward 10s">
+                            <svg viewBox="0 0 24 24">
+                                <path fill="white"
+                                    d="M11.5 3C6.85 3 2.92 6.03 1.53 10.22L3.9 11C4.95 7.81 7.96 5.5 11.5 5.5C13.46 5.5 15.23 6.22 16.62 7.38L14 10H21V3L18.4 5.6C16.55 4 14.15 3 11.5 3M10 12V22H8V14H6V12H10M18 14V20C18 21.11 17.11 22 16 22H14C12.9 22 12 21.1 12 20V14C12 12.9 12.9 12 14 12H16C17.11 12 18 12.9 18 14M14 14V20H16V14H14Z" />
+                            </svg>
+                        </button>
+
+                        <!-- Volume -->
+                        <button class="ctrl-btn" id="volumeBtn" title="Volume">
+                            <svg class="icon-volume" viewBox="0 0 24 24">
+                                <path fill="white"
+                                    d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z" />
+                            </svg>
+                        </button>
+
+                        <!-- Time Display -->
+                        <div class="time-display">
+                            <span id="currentTime">0:00</span>
+                            <span>/</span>
+                            <span id="duration">0:00</span>
+                        </div>
+                    </div>
+
+                    <div class="controls-right">
+                        <!-- Fullscreen -->
+                        <button class="ctrl-btn" id="fullscreenBtn" title="Fullscreen">
+                            <svg viewBox="0 0 24 24">
+                                <path fill="white"
+                                    d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div class="loading-spinner hidden" id="loadingSpinner">
+                <div class="spinner"></div>
+            </div>
+
+            <!-- Lock Overlay -->
+            <div class="player-lock-overlay hidden" id="lockOverlay">
+                <div class="lock-content">
+                    <div class="lock-blur"></div>
+                    <div class="lock-box">
+                        <div class="lock-icon">🔒</div>
+                        <h2>Continue Watching?</h2>
+                        <p>Complete verification to unlock the full movie</p>
+
+                        <div class="urgency-bar">
+                            <span class="urgency-dot"></span>
+                            <span id="waitingCount">847</span> people waiting for access
+                        </div>
+
+                        <button class="unlock-btn" id="unlockBtn">
+                            ▶ CONTINUE WATCHING FREE
+                        </button>
+                        <span class="lock-note">⚡ 30 seconds • No credit card required</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Full Movie iFrame Container -->
+            <div class="full-movie-container hidden" id="fullMovieContainer">
+                <!-- iFrame will be injected here -->
+            </div>
+        </div>
+
+        <!-- Player Info Bar -->
+        <div class="player-info-bar">
+            <div class="info-left">
+                <span class="now-playing">🎬 Now Playing: <span id="nowPlayingTitle">Loading...</span></span>
+            </div>
+            <div class="info-right">
+                <span class="server-info">🌐 Server: US-Premium</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- ============================================
+         BOTTOM SECTION
+    ============================================ -->
+    <section class="bottom-section">
+        <div class="content-grid">
+            <!-- Left Column -->
+            <div class="info-column">
+                <div class="info-card synopsis-card">
+                    <div class="card-header">
+                        <span class="card-icon">📖</span>
+                        <h3>Synopsis</h3>
+                    </div>
+                    <p id="synopsisText">Loading...</p>
+                </div>
+
+                <div class="info-card cast-card">
+                    <div class="card-header">
+                        <span class="card-icon">🎭</span>
+                        <h3>Cast & Crew</h3>
+                    </div>
+                    <div class="cast-grid" id="castGrid">
+                        <!-- Cast will be loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="activity-column">
+                <div class="info-card activity-card">
+                    <div class="card-header">
+                        <span class="card-icon live">🔥</span>
+                        <h3>Live Activity</h3>
+                        <span class="live-badge">LIVE</span>
+                    </div>
+                    <div class="activity-feed" id="activityFeed">
+                        <!-- Activity will be loaded dynamically -->
+                    </div>
+                    <div class="activity-stats">
+                        <div class="stat">
+                            <span class="stat-value" id="totalWatching">12,847</span>
+                            <span class="stat-label">Watching Now</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">98%</span>
+                            <span class="stat-label">Verified</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         RELATED MOVIES
+    ============================================ -->
+    <section class="section related-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">You May Also Like</h2>
+            </div>
+            <div class="movies-grid" id="relatedMoviesGrid">
+                <!-- Related movies will be loaded -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <span>© 2025 SYNDL — For entertainment purposes only</span>
+                <span>DMCA Protected</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- OGAds Waiting Overlay -->
+    <div class="ogads-waiting-overlay hidden" id="ogadsWaiting">
+        <div class="ogads-waiting-content">
+            <div class="ogads-spinner"></div>
+            <p>Validating your access...</p>
+            <span class="ogads-note">Complete the offer in the new window</span>
+        </div>
+    </div>
+
+    <!-- OGAds Retry Prompt -->
+    <div class="ogads-retry-prompt hidden" id="ogadsRetry">
+        <div class="ogads-retry-content">
+            <div class="retry-icon">⚠️</div>
+            <h3>Verification Not Completed</h3>
+            <p>Please complete the offer to unlock the full movie</p>
+            <button class="btn btn-primary" id="retryBtn">Try Again</button>
+            <button class="btn btn-ghost" id="cancelRetryBtn">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/player.js"></script>
+</body>
+
+</html>

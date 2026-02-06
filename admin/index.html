@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - SYNDL</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+
+<body>
+    <!-- ============================================
+         LOGIN SCREEN
+    ============================================ -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-container">
+            <div class="login-logo">
+                <span class="logo-icon">🎬</span>
+                <span class="logo-text">SYNDL</span>
+            </div>
+            <h1>Admin Login</h1>
+            <p class="login-subtitle">Enter your credentials to access the dashboard</p>
+
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter password" required>
+                </div>
+
+                <div class="error-message hidden" id="loginError">
+                    Invalid username or password
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">
+                    🔐 Login
+                </button>
+            </form>
+
+            <p class="login-note">Default: admin / syndl2025</p>
+        </div>
+    </div>
+
+    <!-- ============================================
+         ADMIN DASHBOARD
+    ============================================ -->
+    <div class="admin-dashboard hidden" id="adminDashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" class="logo" target="_blank">
+                    <span class="logo-icon">🎬</span>
+                    <span class="logo-text">SYNDL</span>
+                </a>
+                <span class="admin-badge">ADMIN</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-section="dashboard">
+                    📊 Dashboard
+                </button>
+                <button class="nav-item" data-section="movies">
+                    🎬 Movies
+                </button>
+                <button class="nav-item" data-section="add-movie">
+                    ➕ Add Movie
+                </button>
+                <button class="nav-item" data-section="settings">
+                    ⚙️ Settings
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn btn-ghost btn-full" id="logoutBtn">
+                    🚪 Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Dashboard Section -->
+            <section class="admin-section" id="section-dashboard">
+                <div class="section-header-admin">
+                    <h1>📊 Dashboard</h1>
+                    <span class="date-display" id="currentDate"></span>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🎬</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalMovies">0</span>
+                            <span class="stat-label">Total Movies</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="featuredCount">0</span>
+                            <span class="stat-label">Featured</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🆕</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="newCount">0</span>
+                            <span class="stat-label">New Releases</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📁</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="genreCount">0</span>
+                            <span class="stat-label">Genres</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Movies -->
+                <div class="recent-section">
+                    <h2>🎬 Recent Movies</h2>
+                    <div class="movies-table-container">
+                        <table class="movies-table" id="recentMoviesTable">
+                            <thead>
+                                <tr>
+                                    <th>Movie</th>
+                                    <th>Year</th>
+                                    <th>Rating</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentMoviesBody">
+                                <!-- Movies loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Movies Section -->
+            <section class="admin-section hidden" id="section-movies">
+                <div class="section-header-admin">
+                    <h1>🎬 All Movies</h1>
+                    <button class="btn btn-primary" id="addMovieFromList">
+                        ➕ Add Movie
+                    </button>
+                </div>
+
+                <!-- Search & Filter -->
+                <div class="toolbar">
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" class="search-input" id="movieSearch" placeholder="Search movies...">
+                    </div>
+
+                    <select class="filter-select" id="genreFilter" title="Filter movies by genre">
+                        <option value="">All Genres</option>
+                    </select>
+                </div>
+
+                <!-- Movies Table -->
+                <div class="movies-table-container">
+                    <table class="movies-table">
+                        <thead>
+                            <tr>
+                                <th>Movie</th>
+                                <th>Year</th>
+                                <th>Duration</th>
+                                <th>Rating</th>
+                                <th>Genre</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allMoviesBody">
+                            <!-- Movies loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Add Movie Section -->
+            <section class="admin-section hidden" id="section-add-movie">
+                <div class="section-header-admin">
+                    <h1 id="formTitle">➕ Add New Movie</h1>
+                </div>
+
+                <form class="movie-form" id="movieForm">
+                    <input type="hidden" id="editMovieId">
+
+                    <!-- Basic Info -->
+                    <div class="form-section">
+                        <h3>📋 Basic Information</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="movieTitle">Movie Title *</label>
+                                <input type="text" id="movieTitle" placeholder="e.g. Avatar: Fire and Ash" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="movieYear">Year *</label>
+                                <input type="number" id="movieYear" placeholder="2025" min="1900" max="2100" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="movieDuration">Duration *</label>
+                                <input type="text" id="movieDuration" placeholder="e.g. 2h 30min" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="movieDurationSec">Duration (seconds) *</label>
+                                <input type="number" id="movieDurationSec" placeholder="e.g. 9000" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="movieRating">Rating (1-10)</label>
+                                <input type="number" id="movieRating" placeholder="8.5" min="1" max="10" step="0.1">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="movieQuality">Quality</label>
+                                <select id="movieQuality">
+                                    <option value="1080p">1080p HD</option>
+                                    <option value="720p">720p HD</option>
+                                    <option value="4K">4K Ultra HD</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="movieGenre">Genres (comma separated)</label>
+                            <input type="text" id="movieGenre" placeholder="e.g. Action, Sci-Fi, Adventure">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="movieSynopsis">Synopsis</label>
+                            <textarea id="movieSynopsis" rows="4" placeholder="Enter movie description..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Media Links -->
+                    <div class="form-section">
+                        <h3>🔗 Media Links</h3>
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label for="thumbnailUrl">Thumbnail Image URL *</label>
+                                <input type="url" id="thumbnailUrl" placeholder="https://example.com/image.jpg"
+                                    required>
+                                <span class="form-hint">Direct link to movie poster image</span>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="previewUrl">Preview Video URL *</label>
+                                <input type="url" id="previewUrl" placeholder="https://dropbox.com/preview.mp4"
+                                    required>
+                                <span class="form-hint">Dropbox, Google Drive, or direct MP4 link</span>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="fullMovieUrl">Full Movie URL *</label>
+                                <input type="url" id="fullMovieUrl"
+                                    placeholder="https://drive.google.com/file/d/xxx/preview" required>
+                                <span class="form-hint">Google Drive embed link (use /preview instead of /view)</span>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="lockerUrl">Content Locker URL *</label>
+                                <input type="url" id="lockerUrl" placeholder="https://appverification.site/cl/i/xxx"
+                                    required>
+                                <span class="form-hint">OGAds or CPAGrip locker URL</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cast -->
+                    <div class="form-section">
+                        <h3>🎭 Cast (Optional)</h3>
+                        <div id="castInputs">
+                            <div class="cast-input-row">
+                                <input type="text" placeholder="Actor name" class="cast-name">
+                                <input type="text" placeholder="Role" class="cast-role">
+                                <button type="button" class="btn btn-ghost remove-cast">✕</button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary" id="addCastBtn">
+                            ➕ Add Cast Member
+                        </button>
+                    </div>
+
+                    <!-- Options -->
+                    <div class="form-section">
+                        <h3>⚙️ Options</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="isFeatured">
+                                <span>⭐ Featured Movie (shows in hero section)</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="isNew" checked>
+                                <span>🆕 New Release</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            💾 Save Movie
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Settings Section -->
+            <section class="admin-section hidden" id="section-settings">
+                <div class="section-header-admin">
+                    <h1>⚙️ Settings</h1>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="settings-card">
+                        <h3>🔐 Change Password</h3>
+                        <form id="passwordForm">
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <input type="password" id="newPassword" placeholder="Enter new password">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                Update Password
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="settings-card">
+                        <h3>📤 Export Data</h3>
+                        <p>Download all movie data as JSON file.</p>
+                        <button class="btn btn-secondary" id="exportBtn">
+                            📥 Export Movies
+                        </button>
+                    </div>
+
+                    <div class="settings-card danger">
+                        <h3>🗑️ Reset Data</h3>
+                        <p>This will delete all movies and reset to default data.</p>
+                        <button class="btn btn-danger" id="resetBtn">
+                            ⚠️ Reset All Data
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal hidden" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-icon">⚠️</div>
+            <h2>Delete Movie?</h2>
+            <p>This action cannot be undone.</p>
+            <p class="movie-name" id="deleteMovieName"></p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancelDelete">Cancel</button>
+                <button class="btn btn-danger" id="confirmDelete">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast hidden" id="toast">
+        <span class="toast-icon">✅</span>
+        <span class="toast-message" id="toastMessage">Success!</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/data.js"></script>
+    <script src="../js/admin.js"></script>
+</body>
+
+</html>
