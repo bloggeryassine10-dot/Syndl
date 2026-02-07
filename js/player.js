@@ -106,7 +106,7 @@
             isLocked: false,
             isUnlocked: false,
             previewEnded: false,
-            previewDuration: 60, // Seconds of preview before lock
+            previewDuration: 180, // 3 minutes preview before lock
         };
 
         // ============================================
