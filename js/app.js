@@ -162,15 +162,17 @@
     // INITIALIZATION
     // ============================================
     function init() {
-        // Initialize database
-        MoviesDB.init();
+        // Initialize database with callback for async Firebase loading
+        MoviesDB.init(function () {
+            // Render content after data is loaded
+            renderHero();
+            renderNewReleases();
+            renderAllMovies();
 
-        // Render content
-        renderHero();
-        renderNewReleases();
-        renderAllMovies();
+            console.log('🎬 SYNDL Platform initialized with', MoviesDB.getAll().length, 'movies');
+        });
 
-        // Event listeners
+        // Event listeners (can run immediately)
         window.addEventListener('scroll', handleScroll);
         elements.categoryTabs?.addEventListener('click', handleCategoryClick);
         elements.searchInput?.addEventListener('input', handleSearch);
@@ -178,7 +180,12 @@
         // Animations
         animateLiveCount();
 
-        console.log('🎬 SYNDL Platform initialized');
+        // Listen for real-time updates from Firebase
+        window.addEventListener('moviesUpdated', function () {
+            renderHero();
+            renderNewReleases();
+            renderAllMovies();
+        });
     }
 
     // Start when DOM is ready

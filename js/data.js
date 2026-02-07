@@ -1,10 +1,13 @@
 // ============================================
-// SYNDL.COM - Movies Database
+// SYNDL.COM - Movies Database (Firebase Version)
 // ============================================
 
 const MoviesDB = {
-    // Movies Data Array
-    movies: [
+    // Movies Data Array (loaded from Firebase)
+    movies: [],
+
+    // Default movies (used when Firebase is empty)
+    defaultMovies: [
         {
             id: "avatar-fire-and-ash",
             title: "Avatar: Fire and Ash",
@@ -54,6 +57,9 @@ const MoviesDB = {
             addedDate: "2025-02-01"
         }
     ],
+
+    // Firebase reference
+    dbRef: null,
 
     // Get all movies
     getAll: function () {
@@ -105,7 +111,7 @@ const MoviesDB = {
         movie.id = this.generateId(movie.title);
         movie.addedDate = new Date().toISOString().split('T')[0];
         this.movies.unshift(movie);
-        this.save();
+        this.saveToFirebase();
         return movie;
     },
 
@@ -114,7 +120,7 @@ const MoviesDB = {
         const index = this.movies.findIndex(m => m.id === id);
         if (index !== -1) {
             this.movies[index] = { ...this.movies[index], ...updates };
-            this.save();
+            this.saveToFirebase();
             return this.movies[index];
         }
         return null;
@@ -125,7 +131,7 @@ const MoviesDB = {
         const index = this.movies.findIndex(m => m.id === id);
         if (index !== -1) {
             this.movies.splice(index, 1);
-            this.save();
+            this.saveToFirebase();
             return true;
         }
         return false;
@@ -138,22 +144,72 @@ const MoviesDB = {
             .replace(/(^-|-$)/g, '');
     },
 
-    // Save to LocalStorage
-    save: function () {
+    // Save to Firebase
+    saveToFirebase: function () {
+        if (this.dbRef) {
+            this.dbRef.set(this.movies)
+                .then(() => console.log('✅ Data saved to Firebase'))
+                .catch(err => console.error('❌ Firebase save error:', err));
+        }
+        // Also save to LocalStorage as backup
         localStorage.setItem('syndl_movies', JSON.stringify(this.movies));
     },
 
-    // Load from LocalStorage
-    load: function () {
-        const saved = localStorage.getItem('syndl_movies');
-        if (saved) {
-            this.movies = JSON.parse(saved);
+    // Load from Firebase
+    loadFromFirebase: function (callback) {
+        if (typeof firebase !== 'undefined' && firebase.database) {
+            this.dbRef = firebase.database().ref('movies');
+
+            this.dbRef.once('value')
+                .then(snapshot => {
+                    const data = snapshot.val();
+                    if (data && Array.isArray(data) && data.length > 0) {
+                        this.movies = data;
+                        console.log('✅ Loaded', this.movies.length, 'movies from Firebase');
+                    } else {
+                        // First time - upload default movies to Firebase
+                        console.log('📤 Uploading default movies to Firebase...');
+                        this.movies = this.defaultMovies;
+                        this.saveToFirebase();
+                    }
+                    if (callback) callback();
+                })
+                .catch(err => {
+                    console.error('❌ Firebase load error:', err);
+                    this.loadFromLocalStorage();
+                    if (callback) callback();
+                });
+
+            // Set up real-time listener for updates
+            this.dbRef.on('value', snapshot => {
+                const data = snapshot.val();
+                if (data && Array.isArray(data)) {
+                    this.movies = data;
+                    console.log('🔄 Real-time update received');
+                    // Trigger custom event for UI updates
+                    window.dispatchEvent(new CustomEvent('moviesUpdated'));
+                }
+            });
+        } else {
+            console.log('⚠️ Firebase not available, using LocalStorage');
+            this.loadFromLocalStorage();
+            if (callback) callback();
         }
     },
 
-    // Initialize (load saved data)
-    init: function () {
-        this.load();
+    // Load from LocalStorage (fallback)
+    loadFromLocalStorage: function () {
+        const saved = localStorage.getItem('syndl_movies');
+        if (saved) {
+            this.movies = JSON.parse(saved);
+        } else {
+            this.movies = this.defaultMovies;
+        }
+    },
+
+    // Initialize
+    init: function (callback) {
+        this.loadFromFirebase(callback);
     }
 };
 
@@ -200,9 +256,3 @@ const AdminAuth = {
         }
     }
 };
-
-// Initialize on load
-document.addEventListener('DOMContentLoaded', function () {
-    MoviesDB.init();
-    AdminAuth.init();
-});
