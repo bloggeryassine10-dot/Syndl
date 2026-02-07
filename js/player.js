@@ -16,6 +16,9 @@
     // ============================================
     // LOAD MOVIE DATA
     // ============================================
+    // IMPORTANT: Initialize database FIRST to load from LocalStorage
+    MoviesDB.init();
+
     const movieId = getMovieId();
     const movie = MoviesDB.getById(movieId);
 
